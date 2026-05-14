@@ -1,13 +1,5 @@
 #pragma once
 
-#ifdef EZ_STRINGS_EXPORTS
-	#define EZ_STRINGS_API __declspec(dllexport)
-#elif defined(EZ_STRINGS_STATIC)
-	#define EZ_STRINGS_API
-#else
-	#define EZ_STRINGS_API __declspec(dllimport)
-#endif
-
 /**
   Represents a string. It holds the basic information
   about a string, such as the array of characters, the
@@ -29,6 +21,14 @@ typedef struct EzString
 	*/
 	size_t capacity;
 } EzString;
+
+#ifdef EZ_STRINGS_EXPORTS
+	#define EZ_STRINGS_API __declspec(dllexport)
+#elif defined(EZ_STRINGS_STATIC)
+	#define EZ_STRINGS_API
+#else
+	#define EZ_STRINGS_API __declspec(dllimport)
+#endif
 
 /**
   Creates a new EzString from a string literal.
