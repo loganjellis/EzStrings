@@ -1,9 +1,4 @@
 build.bat
-CMakeLists.txt
 .cache/
 build/
-src/
-docs/html/*
-!docs/html/index.html
 Doxyfile
-example.c

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdio.h>
+
 /**
   Represents the type of a log statement.
 */
@@ -8,193 +10,256 @@ typedef enum
 	/**
 	  Used for normal log messages.
 	*/
-	VIB_LOGS_INFO,
+	VL_INFO,
 	/**
 	  Used to signal that an operation
 	  was successful.
 	*/
-	VIB_LOGS_SUCCESS,
+	VL_SUCCESS,
 	/**
 	  Used to debug a value or expression.
 	*/
-	VIB_LOGS_DEBUG,
+	VL_DEBUG,
 	/**
 	  Used to send a warning message.
 	*/
-	VIB_LOGS_WARNING,
+	VL_WARNING,
 	/**
 	  Used to send an error message.
 	*/
-	VIB_LOGS_ERROR
-} vib_logs_type;
+	VL_ERROR
+} vl_type;
 
 /**
   Represents a color using values of 0 to 255.
 */
-typedef struct vib_logs_color
+typedef struct vl_color
 {
 	/**
 	  The red value.
 	*/
-	int r;
+	unsigned char r;
 	/**
 	  The green value.
 	*/
-	int g;
+	unsigned char g;
 	/**
 	  The blue value.
 	*/
-	int b;
-} vib_logs_color;
+	unsigned char b;
+} vl_color;
 
 /**
   White.
 */
-#define VIB_LOGS_WHITE (vib_logs_color) { 255, 255, 255 }
+#define VL_WHITE (vl_color) { 255, 255, 255 }
 /**
   Light blue.
 */
-#define VIB_LOGS_LIGHT_BLUE (vib_logs_color) { 0, 125, 215 }
+#define VL_LIGHT_BLUE (vl_color) { 0, 125, 215 }
 /**
   Blue.
 */
-#define VIB_LOGS_BLUE (vib_logs_color) { 0, 255, 255 }
+#define VL_BLUE (vl_color) { 0, 255, 255 }
 /**
   Light green.
 */
-#define VIB_LOGS_LIGHT_GREEN (vib_logs_color) { 0, 175, 0 }
+#define VL_LIGHT_GREEN (vl_color) { 0, 175, 0 }
 /**
   Green.
 */
-#define VIB_LOGS_GREEN (vib_logs_color) { 0, 255, 0 }
+#define VL_GREEN (vl_color) { 0, 255, 0 }
 /**
   Light orange.
 */
-#define VIB_LOGS_LIGHT_ORANGE (vib_logs_color) { 200, 125, 0 }
+#define VL_LIGHT_ORANGE (vl_color) { 200, 125, 0 }
 /**
   Orange.
 */
-#define VIB_LOGS_ORANGE (vib_logs_color) { 255, 150, 0 }
+#define VL_ORANGE (vl_color) { 255, 150, 0 }
 /**
   Light yellow.
 */
-#define VIB_LOGS_LIGHT_YELLOW (vib_logs_color) { 200, 200, 0 }
+#define VL_LIGHT_YELLOW (vl_color) { 200, 200, 0 }
 /**
   Yellow.
 */
-#define VIB_LOGS_YELLOW (vib_logs_color) { 255, 255, 0 }
+#define VL_YELLOW (vl_color) { 255, 255, 0 }
 /**
   Light red.
 */
-#define VIB_LOGS_LIGHT_RED (vib_logs_color) { 200, 0, 0 }
+#define VL_LIGHT_RED (vl_color) { 200, 0, 0 }
 /**
   Red.
 */
-#define VIB_LOGS_RED (vib_logs_color) { 255, 0, 0 }
+#define VL_RED (vl_color) { 255, 0, 0 }
 
 /**
   Represents the color scheme of VibrantLogs.
 
-  @see VIB_LOGS_DEFAULT_COLORS
+  @see VL_DEFAULT_COLORS
 */
-typedef struct vib_logs_color_scheme
+typedef struct vl_color_scheme
 {
 	/**
-	  The color of the time.
+	  The color of the time (if printed).
+
+	  @see vl_config.
+	  @see vl_use_config(vl_config).
 	*/
-	vib_logs_color time_color;
+	vl_color time_color;
+	/**
+	  The color of the date (if printed).
+
+	  @see vl_config.
+	  @see vl_use_config(vl_config).
+	*/
+	vl_color date_color;
 	/**
 	  The color of the prefix of info messages.
 	*/
-	vib_logs_color info_prefix_color;
+	vl_color info_prefix_color;
 	/**
 	  The main color of info messages.
 	*/
-	vib_logs_color info_color;
+	vl_color info_color;
 	/**
 	  The color of the prefix of successful operation messages.
 	*/
-	vib_logs_color success_prefix_color;
+	vl_color success_prefix_color;
 	/**
 	  The main color of successful operation messages.
 	*/
-	vib_logs_color success_color;
+	vl_color success_color;
 	/**
 	  The color of the prefix of debug messages.
 	*/
-	vib_logs_color debug_prefix_color;
+	vl_color debug_prefix_color;
 	/**
 	  The main color of debug messages.
 	*/
-	vib_logs_color debug_color;
+	vl_color debug_color;
 	/**
 	  The color of the prefix of warning messages.
 	*/
-	vib_logs_color warning_prefix_color;
+	vl_color warning_prefix_color;
 	/**
 	  The main color of warning messages.
 	*/
-	vib_logs_color warning_color;
+	vl_color warning_color;
 	/**
 	  The color of the prefix of error messages.
 	*/
-	vib_logs_color error_prefix_color;
+	vl_color error_prefix_color;
 	/**
 	  The main color of error messages.
 	*/
-	vib_logs_color error_color;
-} vib_logs_color_scheme;
+	vl_color error_color;
+} vl_color_scheme;
 
 /**
   Obtains the default color scheme of VibrantLogs.
 */
-#define VIB_LOGS_DEFAULT_COLORS (vib_logs_color_scheme) { \
-		.time_color = VIB_LOGS_WHITE, \
-		.info_prefix_color = VIB_LOGS_LIGHT_BLUE, \
-		.info_color = VIB_LOGS_BLUE, \
-		.success_prefix_color = VIB_LOGS_LIGHT_GREEN, \
-		.success_color = VIB_LOGS_GREEN, \
-		.debug_prefix_color = VIB_LOGS_LIGHT_ORANGE, \
-		.debug_color = VIB_LOGS_ORANGE, \
-		.warning_prefix_color = VIB_LOGS_LIGHT_YELLOW, \
-		.warning_color = VIB_LOGS_YELLOW, \
-		.error_prefix_color = VIB_LOGS_LIGHT_RED, \
-		.error_color = VIB_LOGS_RED \
+#define VL_DEFAULT_COLORS (vl_color_scheme) { \
+		.time_color = VL_WHITE, \
+		.date_color = VL_WHITE, \
+		.info_prefix_color = VL_LIGHT_BLUE, \
+		.info_color = VL_BLUE, \
+		.success_prefix_color = VL_LIGHT_GREEN, \
+		.success_color = VL_GREEN, \
+		.debug_prefix_color = VL_LIGHT_ORANGE, \
+		.debug_color = VL_ORANGE, \
+		.warning_prefix_color = VL_LIGHT_YELLOW, \
+		.warning_color = VL_YELLOW, \
+		.error_prefix_color = VL_LIGHT_RED, \
+		.error_color = VL_RED \
 	};
 
-#ifdef VIB_LOGS_EXPORTS
-	#define VIB_LOGS_API __declspec(dllexport)
-#elif defined(VIB_LOGS_STATIC)
-	#define VIB_LOGS_API
+/**
+  Represents a custom config for VibrantLogs.
+
+  When VibrantLogs logs messages, you can set
+  how VibrantLogs prints the time and date.
+*/
+typedef struct vl_config
+{
+	/**
+	  The color scheme of VibrantLogs.
+
+	  By default, it is set to VL_DEFAULT_COLORS.
+	*/
+	vl_color_scheme colors;
+	/**
+	  The output destination of VibrantLogs
+	  messages.
+
+	  The default destination is stdout, but
+	  you can set this to another file, and VibrantLogs
+	  will write to that file instead.
+	*/
+	FILE *output_destination;
+	/**
+	  The log level of VibrantLogs.
+
+	  This acts as a filter for which log messages are
+	  allowed through. For example, if the log level
+	  is VL_ERROR, only error messages are printed,
+	  but if the log level is VL_WARNING, then both
+	  warning and error messages are shown. The VL_DEBUG
+	  and VL_SUCCESS log types are exceptions to this rule.
+	*/
+	vl_type log_level;
+	/**
+	  Indicates whether or not VibrantLogs will
+	  print the current time. This is true by default.
+	*/
+	bool print_time;
+	/**
+	  Indicates whether or not VibrantLogs will
+	  print the current date. This includes
+	  the day, month, and year. This is false
+	  by default.
+	*/
+	bool print_date;
+	/**
+	  Indicates whether or not VibrantLogs will
+	  print the current date's month as a number
+	  value, or the month's name. This is false by
+	  default.
+	*/
+	bool print_month_name;
+} vl_config;
+
+#ifdef _WIN32
+	#ifdef VL_EXPORTS
+		#define VL_API __declspec(dllexport)
+	#else
+		#define VL_API __declspec(dllimport)
+	#endif
 #else
-	#define VIB_LOGS_API __declspec(dllimport)
+	#define VL_API
 #endif
 
 /**
-  Sets the color scheme of VibrantLogs.
+  Initializes the VibrantLogs library.
 
-  The initial color scheme of VibrantLogs
-  is equal to VIB_LOGS_DEFAULT_COLORS.
-
-  @see VIB_LOGS_DEFAULT_COLORS
-*/
-VIB_LOGS_API void vib_logs_set_colors(vib_logs_color_scheme color_scheme);
-/**
-  Obtains the current color scheme of VibrantLogs.
-*/
-VIB_LOGS_API vib_logs_color_scheme *vib_logs_curr_colors(void);
-
-/**
-  Inserts the current time string into the given buffer.
-
-  @param buffer The buffer to insert the time into.
-  @param size The size of the buffer in bytes. This size
-  value must be at least 12 bytes to view the full
-  time string.
+  @note This must be called for VibrantLogs
+  to work properly.
 
   @return 1 on success, 0 on failure.
 */
-VIB_LOGS_API int vib_logs_get_time(char *buffer, size_t size);
+VL_API int vl_init(void);
+
+/**
+  Sets the config of VibrantLogs.
+
+  @see vl_config.
+*/
+VL_API void vl_use_config(vl_config cfg);
+/**
+  Obtains the current config of VibrantLogs.
+*/
+VL_API vl_config *vl_curr_config(void);
 
 /**
   Prints a message.
@@ -204,16 +269,45 @@ VIB_LOGS_API int vib_logs_get_time(char *buffer, size_t size);
 
   @return 1 on success, 0 on failure.
 */
-VIB_LOGS_API int vib_logs_log(vib_logs_type log_type, const char *fmt, ...);
+VL_API int vl_log(vl_type log_type, const char *fmt, ...);
 /**
   Prints a delayed message.
 
   @note The max length of a VibrantLogs message
   is 256 characters.
 
+  @note This function only works when vl_update(double)
+  is called during the program.
+
   @return 1 on success, 0 on failure.
 */
-VIB_LOGS_API int vib_logs_delay_log(vib_logs_type log_type, float seconds, const char *fmt, ...);
+VL_API int vl_delay_log(vl_type log_type, double seconds, const char *fmt, ...);
+typedef struct timey_timestamp timey_timestamp;
+typedef struct timey_datetime timey_datetime;
+/**
+  Schedules a message using a timestamp.
+
+  @note The max length of a VibrantLogs message
+  is 256 characters.
+
+  @note This function only works when vl_update(double)
+  is called during the program.
+
+  @return 1 on success, 0 on failure.
+*/
+VL_API int vl_schedule_log_ts(vl_type log_type, struct timey_timestamp *ts, const char *fmt, ...);
+/**
+  Schedules a message using a datetime.
+
+  @note The max length of a VibrantLogs message
+  is 256 characters.
+
+  @note This function only works when vl_update(double)
+  is called during the program.
+
+  @return 1 on success, 0 on failure.
+*/
+VL_API int vl_schedule_log_dt(vl_type log_type, struct timey_datetime *dt, const char *fmt, ...);
 /**
   Updates the VibrantLogs library.
 
@@ -223,4 +317,4 @@ VIB_LOGS_API int vib_logs_delay_log(vib_logs_type log_type, float seconds, const
   of the program. Delta time is the time between
   the last frame and the current frame.
 */
-VIB_LOGS_API void vib_logs_update(float delta_time);
+VL_API void vl_update(double delta_time);
