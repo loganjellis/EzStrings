@@ -9,7 +9,7 @@ int main(void)
 
 	ez_string_print(&s);
 
-	ez_string_append_s(&s, " i am logan cuh!");
+	ez_string_append_s(&s, " goodbye world!");
 
 	ez_string_print(&s);
 
