@@ -22,33 +22,33 @@ target_include_directories(ez_strings PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_S
 
 target_link_libraries(ez_strings PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/lib/libtimey.dll.a" "${CMAKE_CURRENT_SOURCE_DIR}/lib/libvibrant_logs.dll.a")
 
-add_executable(EzStrings_test "${CMAKE_CURRENT_SOURCE_DIR}/example.c")
-target_link_libraries(EzStrings_test PRIVATE ez_strings)
+add_executable(ez_strings_test "${CMAKE_CURRENT_SOURCE_DIR}/example.c")
+target_link_libraries(ez_strings_test PRIVATE ez_strings)
 
 install(TARGETS ez_strings
-	EXPORT EzStringsTargets
+	EXPORT ez_strings-targets
 	ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
-install(EXPORT EzStringsTargets
-	FILE EzStringsTargets.cmake
+install(EXPORT ez_strings-targets
+	FILE ez_strings-targets.cmake
 	NAMESPACE EzStrings::
 	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/EzStrings)
 
 configure_package_config_file(
-	${CMAKE_CURRENT_SOURCE_DIR}/cmake/EzStringsConfig.cmake.in
-	${CMAKE_CURRENT_BINARY_DIR}/EzStringsConfig.cmake
+	${CMAKE_CURRENT_SOURCE_DIR}/cmake/ez_strings_config.cmake.in
+	${CMAKE_CURRENT_BINARY_DIR}/ez_strings_config.cmake
 	INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/EzStrings)
 
 write_basic_package_version_file(
-	${CMAKE_CURRENT_BINARY_DIR}/EzStringsConfigVersion.cmake
+	${CMAKE_CURRENT_BINARY_DIR}/ez_strings_configVersion.cmake
 	VERSION ${PROJECT_VERSION}
 	COMPATIBILITY SameMajorVersion)
 
 install(FILES
-	${CMAKE_CURRENT_BINARY_DIR}/EzStringsConfig.cmake
-	${CMAKE_CURRENT_BINARY_DIR}/EzStringsConfigVersion.cmake
+	${CMAKE_CURRENT_BINARY_DIR}/ez_strings_config.cmake
+	${CMAKE_CURRENT_BINARY_DIR}/ez_strings_configVersion.cmake
 	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/EzStrings)

@@ -5,14 +5,14 @@
 #include "vibrant_logs.h"
 #include "ez_strings.h"
 
-EzString ez_string_create(const char *literal)
+ez_string ez_string_create(const char *literal)
 {
-	EzString s = {0};
+	ez_string s = {0};
 
 	if(!literal)
 	{
 		s.data = NULL;
-		vl_log(VL_ERROR, "Cannot create EzString from null string literal.\n");
+		vl_log(VL_ERROR, "Cannot create ez_string from null string literal.\n");
 		return s;
 	}
 
@@ -23,7 +23,7 @@ EzString ez_string_create(const char *literal)
 	s.data = malloc(s.capacity);
 	if(!s.data)
 	{
-		vl_log(VL_ERROR, "Failed to allocate memory for EzString.\n");
+		vl_log(VL_ERROR, "Failed to allocate memory for ez_string.\n");
 		return s;
 	}
 
@@ -31,14 +31,14 @@ EzString ez_string_create(const char *literal)
 
 	return s;
 }
-EzString ez_string_malloc(size_t length)
+ez_string ez_string_malloc(size_t length)
 {
-	EzString s = {0};
+	ez_string s = {0};
 
 	if(length == SIZE_MAX)
 	{
 		s.data = NULL;
-		vl_log(VL_ERROR, "Failed to malloc for EzString, the given length is equal to SIZE_MAX.\n");
+		vl_log(VL_ERROR, "Failed to malloc for ez_string, the given length is equal to SIZE_MAX.\n");
 		return s;
 	}
 
@@ -48,15 +48,15 @@ EzString ez_string_malloc(size_t length)
 	s.data = malloc(s.capacity);
 
 	if(!s.data)
-		vl_log(VL_ERROR, "Failed to allocate memory for EzString.\n");
+		vl_log(VL_ERROR, "Failed to allocate memory for ez_string.\n");
 
 	return s;
 }
-void ez_string_destroy(EzString *str)
+void ez_string_destroy(ez_string *str)
 {
 	if(!str || !str -> data)
 	{
-		vl_log(VL_ERROR, "Cannot destroy nulll EzString.\n");
+		vl_log(VL_ERROR, "Cannot destroy nulll ez_string.\n");
 		return;
 	}
 
@@ -70,11 +70,11 @@ void ez_string_destroy(EzString *str)
 	str -> capacity = 0;
 }
 
-int ez_string_append_c(EzString *str, char c)
+int ez_string_append_c(ez_string *str, char c)
 {
 	if(!str || !str -> data)
 	{
-		vl_log(VL_ERROR, "Cannot append character to null/invalid EzString.\n");
+		vl_log(VL_ERROR, "Cannot append character to null/invalid ez_string.\n");
 		return 0;
 	}
 
@@ -83,28 +83,28 @@ int ez_string_append_c(EzString *str, char c)
 
 	return 1;
 }
-int ez_string_append_s(EzString *str, const char *s)
+int ez_string_append_s(ez_string *str, const char *s)
 {
 	if(!str || !str -> data)
 	{
-		vl_log(VL_ERROR, "Cannot append string to null/invalid EzString.\n");
+		vl_log(VL_ERROR, "Cannot append string to null/invalid ez_string.\n");
 		return 0;
 	}
 	if(!s)
 	{
-		vl_log(VL_ERROR, "Cannot append null string to an EzString.\n");
+		vl_log(VL_ERROR, "Cannot append null string to an ez_string.\n");
 		return 0;
 	}
 
 	// obtain length of string literal given
 	size_t s_len = strlen(s);
 
-	// should the EzString expand?
+	// should the ez_string expand?
 	if(str -> length + s_len + 1 >= str -> capacity)
 	{
 		size_t new_cap = str -> capacity ? str -> capacity : 1;
 
-		// grow 'new_cap' until input string fits into the EzString
+		// grow 'new_cap' until input string fits into the ez_string
 		while(str -> length + s_len + 1 > new_cap)
 			new_cap *= 2;
 
@@ -112,7 +112,7 @@ int ez_string_append_s(EzString *str, const char *s)
 		char *new_data = realloc(str -> data, new_cap);
 		if(!new_data)
 		{
-			vl_log(VL_ERROR, "Failed to realloc memory for the EzString.\n");
+			vl_log(VL_ERROR, "Failed to realloc memory for the ez_string.\n");
 			return 0;
 		}
 
@@ -123,25 +123,25 @@ int ez_string_append_s(EzString *str, const char *s)
 	// append string
 	memcpy(str -> data + str -> length, s, s_len);
 
-	// add to length of EzString
+	// add to length of ez_string
 	str -> length += s_len;
 
-	// ensure EzString ends with null terminator character
+	// ensure ez_string ends with null terminator character
 	str -> data[str -> length] = '\0';
 
 	return 1;
 }
 
-int ez_string_insert_c(EzString *str, char c, size_t index)
+int ez_string_insert_c(ez_string *str, char c, size_t index)
 {
 	if(!str || !str -> data)
 	{
-		vl_log(VL_ERROR, "Cannot insert character into null/invalid EzString.\n");
+		vl_log(VL_ERROR, "Cannot insert character into null/invalid ez_string.\n");
 		return 0;
 	}
 	if(index > str -> length)
 	{
-		vl_log(VL_ERROR, "Invalid index when inserting character into EzString.\n");
+		vl_log(VL_ERROR, "Invalid index when inserting character into ez_string.\n");
 		return 0;
 	}
 
@@ -153,7 +153,7 @@ int ez_string_insert_c(EzString *str, char c, size_t index)
 
 		if(!new_data)
 		{
-			vl_log(VL_ERROR, "Failed to realloc memory for the EzString.\n");
+			vl_log(VL_ERROR, "Failed to realloc memory for the ez_string.\n");
 			return 0;
 		}
 
@@ -172,21 +172,21 @@ int ez_string_insert_c(EzString *str, char c, size_t index)
 
 	return 1;
 }
-int ez_string_insert_s(EzString *str, const char *s, size_t index)
+int ez_string_insert_s(ez_string *str, const char *s, size_t index)
 {
 	if(!str || !str -> data)
 	{
-		vl_log(VL_ERROR, "Cannot insert string into null/invalid EzString.\n");
+		vl_log(VL_ERROR, "Cannot insert string into null/invalid ez_string.\n");
 		return 0;
 	}
 	if(!s)
 	{
-		vl_log(VL_ERROR, "Cannot insert null string into an EzString.\n");
+		vl_log(VL_ERROR, "Cannot insert null string into an ez_string.\n");
 		return 0;
 	}
 	if(index > str -> length)
 	{
-		vl_log(VL_ERROR, "Invalid index when inserting string into EzString.\n");
+		vl_log(VL_ERROR, "Invalid index when inserting string into ez_string.\n");
 		return 0;
 	}
 
@@ -194,7 +194,7 @@ int ez_string_insert_s(EzString *str, const char *s, size_t index)
 	size_t s_len = strlen(s);
 	if(s_len == 0)
 	{
-		vl_log(VL_WARNING, "Inserting a string of 0 length results in the same EzString.\n");
+		vl_log(VL_WARNING, "Inserting a string of 0 length results in the same ez_string.\n");
 		return 0;
 	}
 
@@ -209,7 +209,7 @@ int ez_string_insert_s(EzString *str, const char *s, size_t index)
 		char *new_data = realloc(str -> data, new_cap);
 		if(!new_data)
 		{
-			vl_log(VL_ERROR, "Failed to realloc memory for the EzString.\n");
+			vl_log(VL_ERROR, "Failed to realloc memory for the ez_string.\n");
 			return 0;
 		}
 
@@ -228,16 +228,16 @@ int ez_string_insert_s(EzString *str, const char *s, size_t index)
 	return 1;
 }
 
-int ez_string_pop_back(EzString *str)
+int ez_string_pop_back(ez_string *str)
 {
 	if(!str || !str -> data)
 	{
-		vl_log(VL_ERROR, "Cannot remove last character from null/invalid EzString.\n");
+		vl_log(VL_ERROR, "Cannot remove last character from null/invalid ez_string.\n");
 		return 0;
 	}
 	if(str -> length == 0)
 	{
-		vl_log(VL_WARNING, "EzString is empty, cannot pop back.\n");
+		vl_log(VL_WARNING, "ez_string is empty, cannot pop back.\n");
 		return 0;
 	}
 
@@ -254,16 +254,16 @@ int ez_string_pop_back(EzString *str)
 
 	return 1;
 }
-int ez_string_remove_c(EzString *str, char c)
+int ez_string_remove_c(ez_string *str, char c)
 {
 	if(!str || !str -> data)
 	{
-		vl_log(VL_ERROR, "Cannot remove character from null/invalid EzString.\n");
+		vl_log(VL_ERROR, "Cannot remove character from null/invalid ez_string.\n");
 		return 0;
 	}
 	if(str -> length == 0)
 	{
-		vl_log(VL_WARNING, "Cannot remove character from the given EzString because its length is 0.\n");
+		vl_log(VL_WARNING, "Cannot remove character from the given ez_string because its length is 0.\n");
 		return 0;
 	}
 
@@ -281,7 +281,7 @@ int ez_string_remove_c(EzString *str, char c)
 	// if char not found, do nothing
 	if(pos == str -> length)
 	{
-		vl_log(VL_WARNING, "The char '%c' was not found in the EzString: '%s'\n", c, str -> data);
+		vl_log(VL_WARNING, "The char '%c' was not found in the ez_string: '%s'\n", c, str -> data);
 		return 0;
 	}
 
@@ -294,16 +294,16 @@ int ez_string_remove_c(EzString *str, char c)
 
 	return 1;
 }
-int ez_string_remove_all_c(EzString *str, char c)
+int ez_string_remove_all_c(ez_string *str, char c)
 {
 	if(!str || !str -> data)
 	{
-		vl_log(VL_ERROR, "Cannot remove characters from null/invalid EzString.\n");
+		vl_log(VL_ERROR, "Cannot remove characters from null/invalid ez_string.\n");
 		return 0;
 	}
 	if(str -> length == 0)
 	{
-		vl_log(VL_WARNING, "Cannot remove characters from an empty EzString.\n");
+		vl_log(VL_WARNING, "Cannot remove characters from an empty ez_string.\n");
 		return 0;
 	}
 
@@ -326,7 +326,7 @@ int ez_string_remove_all_c(EzString *str, char c)
 	*/
 	if(j == str -> length)
 	{
-		vl_log(VL_WARNING, "The char '%c' was not found in the EzString: '%s'\n", c, str -> data);
+		vl_log(VL_WARNING, "The char '%c' was not found in the ez_string: '%s'\n", c, str -> data);
 		return 0;
 	}
 
@@ -336,16 +336,16 @@ int ez_string_remove_all_c(EzString *str, char c)
 
 	return 1;
 }
-int ez_string_remove_s(EzString *str, const char *s)
+int ez_string_remove_s(ez_string *str, const char *s)
 {
 	if(!str || !str -> data)
 	{
-		vl_log(VL_ERROR, "Cannot remove string from null/invalid EzString.\n");
+		vl_log(VL_ERROR, "Cannot remove string from null/invalid ez_string.\n");
 		return 0;
 	}
 	if(!s)
 	{
-		vl_log(VL_ERROR, "Cannot remove null string from an EzString.\n");
+		vl_log(VL_ERROR, "Cannot remove null string from an ez_string.\n");
 		return 0;
 	}
 
@@ -353,7 +353,7 @@ int ez_string_remove_s(EzString *str, const char *s)
 	size_t s_len = strlen(s);
 	if(s_len == 0 || str -> length < s_len)
 	{
-		vl_log(VL_ERROR, "Unable to remove the given string from the EzString due to an invalid length.\n");
+		vl_log(VL_ERROR, "Unable to remove the given string from the ez_string due to an invalid length.\n");
 		return 0;
 	}
 
@@ -368,19 +368,19 @@ int ez_string_remove_s(EzString *str, const char *s)
 		}
 	}
 
-	vl_log(VL_WARNING, "The string '%s' was not found in the EzString: '%s'\n", s, str -> data);
+	vl_log(VL_WARNING, "The string '%s' was not found in the ez_string: '%s'\n", s, str -> data);
 	return 0;
 }
-int ez_string_remove_at(EzString *str, size_t index)
+int ez_string_remove_at(ez_string *str, size_t index)
 {
 	if(!str || !str -> data)
 	{
-		vl_log(VL_ERROR, "Cannot remove characters from null/invalid EzString.\n");
+		vl_log(VL_ERROR, "Cannot remove characters from null/invalid ez_string.\n");
 		return 0;
 	}
 	if(index > str -> length)
 	{
-		vl_log(VL_ERROR, "Invalid index when removing a character from an EzString.\n");
+		vl_log(VL_ERROR, "Invalid index when removing a character from an ez_string.\n");
 		return 0;
 	}
 
@@ -400,11 +400,11 @@ int ez_string_remove_at(EzString *str, size_t index)
 	return 1;
 }
 
-int ez_string_find_c(EzString *str, char c)
+int ez_string_find_c(ez_string *str, char c)
 {
 	if(!str || !str -> data)
 	{
-		vl_log(VL_ERROR, "Cannot find character in a null/invalid EzString.\n");
+		vl_log(VL_ERROR, "Cannot find character in a null/invalid ez_string.\n");
 		return -1;
 	}
 
@@ -415,19 +415,19 @@ int ez_string_find_c(EzString *str, char c)
 			return i;
 	}
 
-	vl_log(VL_WARNING, "The char '%c' was not found in the EzString: '%s'\n", c, str -> data);
+	vl_log(VL_WARNING, "The char '%c' was not found in the ez_string: '%s'\n", c, str -> data);
 	return -1;
 }
-int ez_string_find_s(EzString *str, const char *s)
+int ez_string_find_s(ez_string *str, const char *s)
 {
 	if(!str || !str -> data)
 	{
-		vl_log(VL_ERROR, "Cannot find string in a null/invalid EzString.\n");
+		vl_log(VL_ERROR, "Cannot find string in a null/invalid ez_string.\n");
 		return -1;
 	}
 	if(!s)
 	{
-		vl_log(VL_ERROR, "Cannot find null string in an EzString.\n");
+		vl_log(VL_ERROR, "Cannot find null string in an ez_string.\n");
 		return -1;
 	}
 
@@ -435,7 +435,7 @@ int ez_string_find_s(EzString *str, const char *s)
 	size_t s_len = strlen(s);
 	if(s_len == 0 || str -> length < s_len)
 	{
-		vl_log(VL_ERROR, "Unable to remove the given string from the EzString due to an invalid length.\n");
+		vl_log(VL_ERROR, "Unable to remove the given string from the ez_string due to an invalid length.\n");
 		return -1;
 	}
 
@@ -447,14 +447,14 @@ int ez_string_find_s(EzString *str, const char *s)
 			return i;
 	}
 
-	vl_log(VL_WARNING, "The string '%s' was not found in the EzString: '%s'\n", s, str -> data);
+	vl_log(VL_WARNING, "The string '%s' was not found in the ez_string: '%s'\n", s, str -> data);
 	return -1;
 }
-size_t ez_string_count_c(EzString *str, char c)
+size_t ez_string_count_c(ez_string *str, char c)
 {
 	if(!str || !str -> data)
 	{
-		vl_log(VL_ERROR, "Cannot count characters in null/invalid EzString.\n");
+		vl_log(VL_ERROR, "Cannot count characters in null/invalid ez_string.\n");
 		return 0;
 	}
 
@@ -468,16 +468,16 @@ size_t ez_string_count_c(EzString *str, char c)
 
 	return count;
 }
-size_t ez_string_count_s(EzString *str, const char *s)
+size_t ez_string_count_s(ez_string *str, const char *s)
 {
 	if(!str || !str -> data)
 	{
-		vl_log(VL_ERROR, "Cannot count strings in null/invalid EzString.\n");
+		vl_log(VL_ERROR, "Cannot count strings in null/invalid ez_string.\n");
 		return 0;
 	}
 	if(!s)
 	{
-		vl_log(VL_ERROR, "Cannot search for null string in an EzString.\n");
+		vl_log(VL_ERROR, "Cannot search for null string in an ez_string.\n");
 		return 0;
 	}
 
@@ -496,16 +496,16 @@ size_t ez_string_count_s(EzString *str, const char *s)
 	return count;
 }
 
-int ez_string_replace_c(EzString *str, char target, char new)
+int ez_string_replace_c(ez_string *str, char target, char new)
 {
 	if(!str || !str -> data)
 	{
-		vl_log(VL_ERROR, "Cannot replace characters in null/invalid EzString.\n");
+		vl_log(VL_ERROR, "Cannot replace characters in null/invalid ez_string.\n");
 		return 0;
 	}
 	if(str -> length == 0)
 	{
-		vl_log(VL_WARNING, "The given EzString is empty, cannot replace characters.\n");
+		vl_log(VL_WARNING, "The given ez_string is empty, cannot replace characters.\n");
 		return 0;
 	}
 
@@ -523,7 +523,7 @@ int ez_string_replace_c(EzString *str, char target, char new)
 	// if char not found, do nothing
 	if(pos == str -> length)
 	{
-		vl_log(VL_WARNING, "The char '%c' was not found in the EzString: '%s'\n", target, str -> data);
+		vl_log(VL_WARNING, "The char '%c' was not found in the ez_string: '%s'\n", target, str -> data);
 		return 0;
 	}
 
@@ -532,16 +532,16 @@ int ez_string_replace_c(EzString *str, char target, char new)
 
 	return 1;
 }
-int ez_string_replace_all_c(EzString *str, char target, char new)
+int ez_string_replace_all_c(ez_string *str, char target, char new)
 {
 	if(!str || !str -> data)
 	{
-		vl_log(VL_ERROR, "Cannot replace characters in null/invalid EzString.\n");
+		vl_log(VL_ERROR, "Cannot replace characters in null/invalid ez_string.\n");
 		return 0;
 	}
 	if(str -> length == 0)
 	{
-		vl_log(VL_WARNING, "The given EzString is empty, cannot replace characters.\n");
+		vl_log(VL_WARNING, "The given ez_string is empty, cannot replace characters.\n");
 		return 0;
 	}
 
@@ -558,17 +558,17 @@ int ez_string_replace_all_c(EzString *str, char target, char new)
 
 	if(!target_found)
 	{
-		vl_log(VL_WARNING, "The char '%c' was not found in the EzString: '%s'\n", target, str -> data);
+		vl_log(VL_WARNING, "The char '%c' was not found in the ez_string: '%s'\n", target, str -> data);
 		return 0;
 	}
 
 	return 1;
 }
-int ez_string_replace_s(EzString *str, const char *target, const char *new)
+int ez_string_replace_s(ez_string *str, const char *target, const char *new)
 {
 	if(!str || !str -> data)
 	{
-		vl_log(VL_ERROR, "Cannot replace characters in null/invalid EzString.\n");
+		vl_log(VL_ERROR, "Cannot replace characters in null/invalid ez_string.\n");
 		return 0;
 	}
 	if(!target)
@@ -589,7 +589,7 @@ int ez_string_replace_s(EzString *str, const char *target, const char *new)
 	// ensure lengths are valid
 	if(target_len > str -> length)
 	{
-		vl_log(VL_ERROR, "Target length exceeds EzString length.\n");
+		vl_log(VL_ERROR, "Target length exceeds ez_string length.\n");
 		return 0;
 	}
 
@@ -605,7 +605,7 @@ int ez_string_replace_s(EzString *str, const char *target, const char *new)
 	// was target found?
 	if(target_pos == str -> length)
 	{
-		vl_log(VL_WARNING, "The string '%s' was not found in the EzString: '%s'\n", target, str -> data);
+		vl_log(VL_WARNING, "The string '%s' was not found in the ez_string: '%s'\n", target, str -> data);
 		return 0;
 	}
 
@@ -624,16 +624,16 @@ int ez_string_replace_s(EzString *str, const char *target, const char *new)
 	return 1;
 }
 
-int ez_string_trim(EzString *str)
+int ez_string_trim(ez_string *str)
 {
 	if(!str || !str -> data)
 	{
-		vl_log(VL_ERROR, "Cannot trim null/invalid EzString.\n");
+		vl_log(VL_ERROR, "Cannot trim null/invalid ez_string.\n");
 		return 0;
 	}
 	if(str -> length == 0)
 	{
-		vl_log(VL_WARNING, "Cannot trim EzString with length of 0.\n");
+		vl_log(VL_WARNING, "Cannot trim ez_string with length of 0.\n");
 		return 0;
 	}
 
@@ -681,14 +681,14 @@ int ez_string_trim(EzString *str)
 	return trimmed;
 }
 
-EzStrings ez_string_split(EzString *str, char delimiter)
+ez_strings ez_string_split(ez_string *str, char delimiter)
 {
-	EzStrings zero_init = {0};
-	EzStrings strings = {0};
+	ez_strings zero_init = {0};
+	ez_strings strings = {0};
 
 	if(!str || !str -> data)
 	{
-		vl_log(VL_ERROR, "Cannot split null/invalid EzString.\n");
+		vl_log(VL_ERROR, "Cannot split null/invalid ez_string.\n");
 		return zero_init;
 	}
 
@@ -709,10 +709,10 @@ EzStrings ez_string_split(EzString *str, char delimiter)
 	strings.count = num_strings;
 
 	// allocate memory to fit the num strings
-	EzString *split_strings = malloc(sizeof(EzString) * num_strings);
+	ez_string *split_strings = malloc(sizeof(ez_string) * num_strings);
 	if(!split_strings)
 	{
-		vl_log(VL_ERROR, "Failed to allocate memory for EzString array.\n");
+		vl_log(VL_ERROR, "Failed to allocate memory for ez_string array.\n");
 		return zero_init;
 	}
 
@@ -732,7 +732,7 @@ EzStrings ez_string_split(EzString *str, char delimiter)
 
 			if(!split_strings[split_index].data)
 			{
-				vl_log(VL_ERROR, "Failed to allocate memory for EzString.\n");
+				vl_log(VL_ERROR, "Failed to allocate memory for ez_string.\n");
 
 				// clean up allocated strings
 				for(size_t j = 0; j < split_index; ++j)
@@ -764,7 +764,7 @@ EzStrings ez_string_split(EzString *str, char delimiter)
 
 	return strings;
 }
-void ez_string_destroy_split(EzStrings *strings)
+void ez_string_destroy_split(ez_strings *strings)
 {
 	if(!strings)
 	{
@@ -778,18 +778,18 @@ void ez_string_destroy_split(EzStrings *strings)
 	free(strings -> data);
 }
 
-void ez_string_print(EzString *str)
+void ez_string_print(ez_string *str)
 {
 	if(!str || !str -> data)
-		vl_log(VL_DEBUG, "EzString: NULL\n");
+		vl_log(VL_DEBUG, "ez_string: NULL\n");
 	else
-		vl_log(VL_DEBUG, "EzString: '%s'\n", str -> data);
+		vl_log(VL_DEBUG, "ez_string: '%s'\n", str -> data);
 }
-void ez_string_print_split(EzStrings *strings)
+void ez_string_print_split(ez_strings *strings)
 {
 	if(!strings)
-		vl_log(VL_ERROR, "EzString Split Array: NULL\n");
+		vl_log(VL_ERROR, "ez_string Split Array: NULL\n");
 	else
 		for(size_t i = 0; i < strings -> count; ++i)
-			vl_log(VL_DEBUG, "EzString Split Array[%zu]: '%s'\n", i, strings -> data[i].data);
+			vl_log(VL_DEBUG, "ez_string Split Array[%zu]: '%s'\n", i, strings -> data[i].data);
 }

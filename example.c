@@ -5,7 +5,7 @@ int main(void)
 {
 	vl_init();
 
-	EzString s = ez_string_create("hello world!");
+	ez_string s = ez_string_create("hello world!");
 
 	ez_string_print(&s);
 
