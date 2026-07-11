@@ -4,7 +4,7 @@
 handles all the memory management, you handle the rest. It's that ez.
 
 > [!NOTE]
-> EzStrings is not thread-safe as of right now.
+> EzStrings is not thread-safe.
 
 ## Clone the repository
 
