@@ -13,23 +13,11 @@ git clone https://github.com/loganjellis/EzStrings.git
 cd EzStrings
 ```
 
-## Building (and optionally installing)
+### Using EzStrings (in-directory, ez_strings.h inside /include, libez_strings.a files inside /lib, and any .dll files next any executables)
 
 ```
-cmake -S . -B build
-cmake --build build
-(only include this line if you want to install EzStrings) cmake --install build --prefix ./install
-```
-
-> [!NOTE]
-> Note that ./install is a placeholder install location for the library. Omitting the install location results in the library being installed in the operating system's default path.
-
-### Using EzStrings (installed package)
-
-```
-list(APPEND CMAKE_PREFIX_PATH "/path/to/ez_strings/install")
-find_package(EzStrings REQUIRED)
-target_link_libraries(app PRIVATE EzStrings::ez_strings)
+target_include_directories(app PRIVATE "path/to/include")
+target_link_libraries(app PRIVATE "path/to/lib")
 ```
 
 ### Using EzStrings (subdirectory)
