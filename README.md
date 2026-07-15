@@ -29,4 +29,4 @@ target_link_libraries(app PRIVATE EzStrings::ez_strings)
 
 ## Example and Documentation
 
-Please refer to `example.c` for an example of EzString code. The library's documentation can also be found in <a href="docs/html" targets="_blank">docs</a>.
+The library's documentation can be found in <a href="docs/html" targets="_blank">docs</a>.
