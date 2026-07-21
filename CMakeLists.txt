@@ -8,7 +8,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_C_COMPILER "C:/ProgramData/mingw64/mingw64/bin/gcc.exe")
 
 include(FetchContent)
-FetchContent_Declare(vibrant_logs GIT_REPOSITORY https://github.com/loganjellis/VibrantLogs.git GIT_TAG main)
+FetchContent_Declare(vibrant_logs GIT_REPOSITORY https://github.com/lojelly/VibrantLogs.git GIT_TAG main)
 FetchContent_MakeAvailable(vibrant_logs)
 
 add_library(ez_strings "${CMAKE_CURRENT_SOURCE_DIR}/src/ez_strings.c")
